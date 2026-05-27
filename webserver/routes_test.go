@@ -38,6 +38,9 @@ func buildTestHandler(state *AppState) http.Handler {
 	mux.HandleFunc("/consumption", func(w http.ResponseWriter, r *http.Request) {
 		routeConsumption(state, w, r)
 	})
+	mux.HandleFunc("/now", func(w http.ResponseWriter, r *http.Request) {
+		routeNow(state, w, r)
+	})
 	return compressionMiddleware(mux)
 }
 

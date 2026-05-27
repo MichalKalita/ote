@@ -37,6 +37,9 @@ func StartWebServer(db *storage.DB) {
 	mux.HandleFunc("/consumption", func(w http.ResponseWriter, r *http.Request) {
 		routeConsumption(state, w, r)
 	})
+	mux.HandleFunc("/now", func(w http.ResponseWriter, r *http.Request) {
+		routeNow(state, w, r)
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -120,6 +123,8 @@ func routeGetRoot(state *AppState, w http.ResponseWriter, r *http.Request) {
 	sb.WriteString(Link("/optimizer", "Optimizer"))
 	sb.WriteString(" | ")
 	sb.WriteString(Link("/consumption", "Consumption analysis"))
+	sb.WriteString(" | ")
+	sb.WriteString(Link("/now", "Live (mobile)"))
 	sb.WriteString(`<div class="flex flex-row justify-center gap-2">`)
 	curStr := currency.String()
 	distStr := strconv.FormatBool(includeDist)
