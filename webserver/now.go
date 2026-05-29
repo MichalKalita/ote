@@ -108,7 +108,11 @@ func routeNow(state *AppState, w http.ResponseWriter, r *http.Request) {
 
 	if currentIdx >= 0 {
 		rows[currentIdx].IsNow = true
-		rows[currentIdx].Progress = float32(now.Second()+now.Nanosecond()/1e9) / 900.0 // 900 sec/quarter
+				// Calculate elapsed seconds since the start of the current 15-minute quarter.
+		quarterMinute := (now.Minute() / 15) * 15
+		quarterStart := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), quarterMinute, 0, 0, loc)
+		elapsed := now.Sub(quarterStart).Seconds()
+		rows[currentIdx].Progress = float32(elapsed) / 900.0 // 900 sec/quarter
 	}
 
 	var minP, maxP float32 = float32(math.Inf(1)), float32(math.Inf(-1))
